@@ -7,7 +7,7 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - "9200:9200"
     networks:
@@ -17,8 +17,8 @@ services:
     image: docker.elastic.co/logstash/logstash:8.13.2
     container_name: logstash
     volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
     ports:
       - "2000:2000"
     environment:
@@ -36,7 +36,7 @@ services:
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     volumes:
-      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     depends_on:
       - elasticsearch
     networks:
