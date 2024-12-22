@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:8.13.2
+        ports:
+        - containerPort: 2000
+        volumeMounts:
+        - mountPath: /usr/share/logstash/pipeline/logstash.conf
+          subPath: logstash.conf
+          name: pipeline
+        - mountPath: /usr/share/logstash/config/logstash.yml
+          subPath: logstash.yml
+          name: config
+      volumes:
+      - name: pipeline
+        configMap:
+          name: logstash-pipeline
+      - name: config
+        configMap:
+          name: logstash-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash
+spec:
+  selector:
+    app: logstash
+  ports:
+  - protocol: TCP
+    port: 2000
+    targetPort: 2000

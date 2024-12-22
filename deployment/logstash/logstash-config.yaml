@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+data:
+  logstash.yml: |
+    # Logstash configuration
+    http.host: 0.0.0.0
+  logstash.conf: |
+    input { stdin { } }
+    output { elasticsearch { hosts => ["http://elasticsearch:9200"] } }
